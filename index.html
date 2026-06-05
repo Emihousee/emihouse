@@ -186,9 +186,7 @@ footer{background:var(--navy);color:white;padding:60px 5% 28px}
 .rd1{transition-delay:0.1s}.rd2{transition-delay:0.2s}.rd3{transition-delay:0.3s}
 /* MOBILE */
 
-@media(max-width:900px){
-  .sobre-img-inner{background-position:50% 20%!important;min-height:360px}
-}
+@media(max-width:900px){.sobre-img-inner{background-position:50% 20%!important;min-height:360px}}
 @media(max-width:900px){
   .nav-links{display:none;flex-direction:column;position:fixed;inset:0;background:var(--navy);padding:80px 40px;gap:0;z-index:199}
   .nav-links.open{display:flex}
@@ -325,7 +323,7 @@ footer{background:var(--navy);color:white;padding:60px 5% 28px}
       <div class="dest-card-overlay"></div>
       <div class="dest-card-content">
         <p class="dest-tag">Santa Catarina</p>
-        <h3 class="dest-title">Porto Belo &<br>Ilha da Galheta</h3>
+        <h3 class="dest-title">Porto Belo</h3>
         <p class="dest-desc">Capital náutica de SC. Águas cristalinas, ilhas paradisíacas e natureza preservada.</p>
       </div>
     </div>
@@ -944,41 +942,17 @@ function submitForm(e){e.preventDefault();document.getElementById('contatoForm')
 
 // Reviews carousel
 (function(){
-  const track = document.getElementById('reviewsTrack');
-  const dotsContainer = document.getElementById('revDots');
-  if (!track) return;
-  const items = Array.from(track.querySelectorAll('.review-item'));
-  let perPage = window.innerWidth <= 900 ? 1 : 3;
-  let pages = Math.ceil(items.length / perPage);
-  let current = 0;
-  function buildDots() {
-    dotsContainer.innerHTML = '';
-    pages = Math.ceil(items.length / perPage);
-    for (let i = 0; i < pages; i++) {
-      const d = document.createElement('div');
-      d.className = 'rev-dot' + (i === 0 ? ' active' : '');
-      d.onclick = () => goTo(i);
-      dotsContainer.appendChild(d);
-    }
-  }
-  function goTo(n) {
-    current = ((n % pages) + pages) % pages;
-    const start = current * perPage;
-    const end = start + perPage;
-    items.forEach((item, idx) => {
-      item.style.display = (idx >= start && idx < end) ? '' : 'none';
-    });
-    dotsContainer.querySelectorAll('.rev-dot').forEach((d, i) =>
-      d.classList.toggle('active', i === current)
-    );
-  }
-  window.shiftReviews = function(dir) { goTo(current + dir); };
-  buildDots();
-  goTo(0);
-  window.addEventListener('resize', function() {
-    perPage = window.innerWidth <= 900 ? 1 : 3;
-    buildDots(); goTo(0);
-  });
+  const track=document.getElementById('reviewsTrack');
+  const dotsContainer=document.getElementById('revDots');
+  if(!track)return;
+  const items=Array.from(track.querySelectorAll('.review-item'));
+  let perPage=window.innerWidth<=900?1:3;
+  let pages=Math.ceil(items.length/perPage),current=0;
+  function buildDots(){dotsContainer.innerHTML='';pages=Math.ceil(items.length/perPage);for(let i=0;i<pages;i++){const d=document.createElement('div');d.className='rev-dot'+(i===0?' active':'');d.onclick=()=>goTo(i);dotsContainer.appendChild(d);}}
+  function goTo(n){current=((n%pages)+pages)%pages;const s=current*perPage,e=s+perPage;items.forEach((item,idx)=>{item.style.display=(idx>=s&&idx<e)?'':'none';});dotsContainer.querySelectorAll('.rev-dot').forEach((d,i)=>d.classList.toggle('active',i===current));}
+  window.shiftReviews=function(dir){goTo(current+dir);};
+  buildDots();goTo(0);
+  window.addEventListener('resize',function(){perPage=window.innerWidth<=900?1:3;buildDots();goTo(0);});
 })();
 
 </script>
