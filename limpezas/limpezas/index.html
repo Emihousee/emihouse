@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0A7C86">
+<meta name="robots" content="noindex">
+<title>Limpezas Emi House</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: coluna de celular; cada limpeza é uma linha com faixa de prioridade à esquerda; navegação fixa embaixo. */
+:root{
+  --bg:#EDF3F3; --surface:#FFFFFF; --ink:#10282B; --muted:#52676A; --line:#D2DFE0;
+  --accent:#0A7C86; --accent-ink:#FFFFFF; --accent-soft:#D9EEF0;
+  --urg:#B8322B; --urg-soft:#FADFDC; --aman:#8F5600; --aman-soft:#FBEBCF;
+  --flex:#23793F; --flex-soft:#DDF1E2; --done:#5C6E70; --done-soft:#E3EAEA;
+  --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0B1819; --surface:#132426; --ink:#E8F1F1; --muted:#93A9AB; --line:#243C3F;
+    --accent:#4FC6CF; --accent-ink:#06191B; --accent-soft:#143A3E;
+    --urg:#FF8A80; --urg-soft:#3D1917; --aman:#F0B454; --aman-soft:#3A2C10;
+    --flex:#6DD08A; --flex-soft:#143220; --done:#93A9AB; --done-soft:#1D3235;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0B1819; --surface:#132426; --ink:#E8F1F1; --muted:#93A9AB; --line:#243C3F;
+  --accent:#4FC6CF; --accent-ink:#06191B; --accent-soft:#143A3E;
+  --urg:#FF8A80; --urg-soft:#3D1917; --aman:#F0B454; --aman-soft:#3A2C10;
+  --flex:#6DD08A; --flex-soft:#143220; --done:#93A9AB; --done-soft:#1D3235;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.4;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+.app{height:100%;max-width:540px;margin:0 auto;display:flex;flex-direction:column;position:relative;background:var(--bg)}
+.top{padding:14px 16px 10px;display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.top h1{font-size:22px;font-weight:700}
+.top small{color:var(--accent);font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+main{flex:1;overflow-y:auto;padding:0 16px 96px;display:flex;flex-direction:column;gap:14px}
+nav{display:grid;grid-template-columns:repeat(4,1fr);background:var(--surface);border-top:1px solid var(--line)}
+nav a{padding:10px 4px 12px;text-align:center;text-decoration:none;color:var(--muted);font-size:13px;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:4px}
+nav a svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+nav a[aria-current="page"]{color:var(--accent)}
+
+.aviso{background:var(--aman-soft);color:var(--aman);border-radius:10px;padding:9px 12px;font-size:14px;font-weight:500}
+.aviso.urg{background:var(--urg-soft);color:var(--urg)}
+.aviso button{background:none;border:0;padding:0;color:inherit;font-weight:700;text-decoration:underline}
+.semana{display:flex;align-items:stretch;gap:6px}
+.semana .seta{flex:0 0 34px;border:1px solid var(--line);background:var(--surface);border-radius:10px;font-size:18px;color:var(--muted)}
+.dias{flex:1;display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.dia{border:1px solid transparent;background:transparent;border-radius:10px;padding:6px 0 8px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.dia span{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:600}
+.dia b{font-family:var(--display);font-size:18px;font-variant-numeric:tabular-nums}
+.dia i{width:6px;height:6px;border-radius:50%;background:transparent}
+.dia.tem i{background:var(--accent)}
+.dia.urg i{background:var(--urg)}
+.dia.hoje b{color:var(--accent)}
+.dia.sel{background:var(--accent);border-color:var(--accent)}
+.dia.sel span,.dia.sel b{color:var(--accent-ink)}
+.dia.sel.tem i,.dia.sel.urg i{background:var(--accent-ink)}
+
+.cab{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.cab h2{font-size:19px;font-weight:700}
+.cab h2.cap{text-transform:capitalize}
+.link{background:none;border:0;color:var(--accent);font-weight:600;padding:6px 4px}
+.resumo{display:flex;flex-wrap:wrap;gap:6px 14px;color:var(--muted);font-size:14px;margin:0}
+.resumo b{color:var(--ink);font-variant-numeric:tabular-nums}
+.grupo{font-family:var(--display);font-size:15px;font-weight:700;color:var(--muted);margin:6px 0 -6px;text-transform:capitalize}
+
+.lista{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.item{width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--p);border-radius:var(--r);padding:11px 12px;display:flex;align-items:center;gap:12px}
+.item.neutro{border-left-width:1px;border-left-color:var(--line)}
+.corpo{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.corpo strong{font-weight:600;overflow-wrap:anywhere}
+.corpo span{color:var(--muted);font-size:14px;overflow-wrap:anywhere}
+.chip{flex:0 0 auto;font-size:12px;font-weight:700;padding:4px 9px;border-radius:999px;background:var(--p-soft);color:var(--p);white-space:nowrap}
+.p1{--p:var(--urg);--p-soft:var(--urg-soft)}
+.p2{--p:var(--aman);--p-soft:var(--aman-soft)}
+.p3{--p:var(--flex);--p-soft:var(--flex-soft)}
+.feita{--p:var(--done);--p-soft:var(--done-soft)}
+.feita .corpo strong{text-decoration:line-through;color:var(--muted)}
+.valor{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap;text-align:right;font-size:14px}
+.valor small{display:block;color:var(--muted);font-weight:500}
+.vazio{background:var(--surface);border:1px dashed var(--line);border-radius:var(--r);padding:22px 16px;text-align:center;color:var(--muted)}
+
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:11px 14px;font-weight:600;text-decoration:none;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;gap:8px;text-align:center}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.ok{background:var(--flex);border-color:var(--flex);color:var(--surface)}
+.btn.perigo{color:var(--urg);border-color:var(--urg)}
+.fab{position:absolute;right:16px;bottom:76px;box-shadow:0 6px 18px rgba(16,40,43,.28);border-radius:999px;padding:13px 18px}
+.campo input,.campo select,.campo textarea{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.campo textarea{min-height:64px;resize:vertical}
+.campo{display:flex;flex-direction:column;gap:5px;min-width:0}
+.campo label{font-size:13px;font-weight:600;color:var(--muted)}
+.campo small{color:var(--muted);font-size:13px}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.filtros{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
+.filtros .campo{flex:1 1 180px}
+.marca{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;padding:10px 0}
+.marca input{width:18px;height:18px;accent-color:var(--accent)}
+.acoes{display:flex;flex-wrap:wrap;gap:8px}
+.acoes .btn{flex:1 1 140px}
+
+.fundo{position:absolute;inset:0;background:rgba(6,20,22,.55);display:flex;align-items:flex-end;z-index:5}
+.fundo[hidden]{display:none}
+.folha{width:100%;max-height:92%;overflow-y:auto;background:var(--bg);border-radius:20px 20px 0 0;padding:16px 16px 22px;display:flex;flex-direction:column;gap:14px}
+.folha header{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.folha h2{font-size:20px}
+.fechar{flex:0 0 34px;border:0;background:var(--done-soft);color:var(--ink);width:34px;height:34px;border-radius:50%;font-size:18px;line-height:1}
+.folha form{display:flex;flex-direction:column;gap:12px}
+.alerta{background:var(--urg-soft);color:var(--urg);border-radius:10px;padding:9px 12px;font-size:14px;font-weight:500}
+.dados{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:15px}
+.dados dt{color:var(--muted)}
+.dados dd{margin:0;overflow-wrap:anywhere}
+.toast{position:absolute;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:999px;font-size:14px;font-weight:600;z-index:9;max-width:90%;text-align:center}
+@media (prefers-reduced-motion:no-preference){
+  .folha{animation:sobe .18s ease-out}
+  @keyframes sobe{from{transform:translateY(24px)}to{transform:none}}
+}
+
+nav[hidden]{display:none}
+.entrada{margin:auto 0;display:flex;flex-direction:column;gap:14px;padding:24px 0}
+.entrada h2{font-size:26px}
+.entrada p{margin:0;color:var(--muted)}
+.bloco{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:12px}
+.bloco h3{font-size:16px}
+.bloco p{margin:0;color:var(--muted);font-size:14px}
+.bloco form{display:flex;flex-direction:column;gap:10px}
+.pessoa{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:14px;overflow-wrap:anywhere}
+.pessoa button{flex:0 0 auto;border:0;background:none;color:var(--urg);font-weight:600;padding:4px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top"><h1 id="titulo">Limpezas</h1><small>Emi House</small></div>
+  <main id="main"><div class="vazio">Carregando…</div></main>
+  <button class="btn pri fab" id="fab" data-act="nova-res" hidden>+ Nova reserva</button>
+  <nav id="nav" aria-label="Seções" hidden>
+    <a href="#agenda" data-v="agenda"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Agenda</a>
+    <a href="#proximas" data-v="proximas"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Próximas</a>
+    <a href="#imoveis" data-v="imoveis"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>Imóveis</a>
+    <a href="#mais" data-v="mais"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>Mais</a>
+  </nav>
+  <div class="fundo" id="fundo" hidden><div class="folha" id="folha" role="dialog" aria-modal="true"></div></div>
+</div>
+<script type="module" src="app.js"></script>
+</body>
+</html>
