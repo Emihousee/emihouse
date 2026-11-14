@@ -1,4 +1,4 @@
-const CACHE = 'limpezas-v1';
+const CACHE = 'limpezas-v2';
 const SHELL = ['./', 'index.html', 'app.js', 'firebase-config.js', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png'];
 const LIBS = ['www.gstatic.com', 'fonts.googleapis.com', 'fonts.gstatic.com', 'cdnjs.cloudflare.com'];
 

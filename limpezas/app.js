@@ -37,7 +37,7 @@ function derivar() {
     let nx = null;
     R.forEach(o => { if (o.id !== r.id && o.imovel === r.imovel && o.ci >= r.co && (!nx || o.ci < nx)) nx = o.ci; });
     const dias = nx ? dif(r.co, nx) : null;
-    return { r, id: r.id, nx, dias, p: dias === 0 ? 1 : dias === 1 ? 2 : 3, dia: r.plan || r.co, feita: !!r.feita };
+    return { r, id: r.id, nx, dias, p: dias === 0 ? 1 : dias === 1 ? 2 : 3, dia: r.plan || r.co, feita: !!r.feita || !!(nx && nx < hoje()) };
   });
 }
 const lim = id => L.find(x => x.id === id);
@@ -51,7 +51,7 @@ const doDia = d => L.filter(x => x.dia === d).sort(ordem);
 
 function linha(x) {
   const r = x.r;
-  const sub = x.p === 1 ? 'Entra hóspede no mesmo dia' : x.p === 2 ? 'Entra hóspede amanhã (' + curto(x.nx) + ')' : x.nx ? 'Próxima entrada em ' + curto(x.nx) : 'Sem próxima reserva';
+  const sub = x.p === 1 ? 'Próxima entrada no mesmo dia da saída (' + curto(x.nx) + ')' : x.p === 2 ? 'Próxima entrada no dia seguinte à saída (' + curto(x.nx) + ')' : x.nx ? 'Próxima entrada em ' + curto(x.nx) : 'Sem próxima reserva';
   return '<li><button class="item ' + (x.feita ? 'feita' : 'p' + x.p) + '" data-act="ver" data-id="' + esc(x.id) + '"><span class="corpo"><strong>' + esc(nomeImv(r.imovel)) + '</strong><span>Saiu: ' + esc(r.hospede || 'hóspede') + (r.n ? ' · ' + r.n + ' pessoas' : '') + '</span><span>' + sub + (r.resp ? ' · ' + esc(r.resp) : '') + '</span></span><span class="chip">' + (x.feita ? 'Feita' : PRIO[x.p]) + '</span></button></li>';
 }
 
